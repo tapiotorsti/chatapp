@@ -1,13 +1,30 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import {db} from '../firebase.js';
 import SignOut from './signout.js';
 
 function Chat() {
+
+    const [messages, setMessages] = useState([]);
+    useEffect (() => {
+        db.collection('messages').orderBy('createdAt').limit(50).onSnapshot( snapshot => {
+            setMessages(snapshot.docs.map(doc => doc.data()
+            ))
+        })
+
+    }, []);
     return (
         <div>
-            <SignOut></SignOut>
-            Logged in
+
+            <SignOut />
+            {messages.map(({id, text, photoURL}) => (
+                <div key={id}>
+                    <img src={photoURL} alt="" />
+                    <p>{text}</p>
+                </div>
+            ))}
+            
         </div>
-    )
+    );
 }
 
 export default Chat;
