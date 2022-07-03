@@ -12,6 +12,7 @@ function Chat() {
         })
 
     }, []);
+    
     return (
         <div>
 
